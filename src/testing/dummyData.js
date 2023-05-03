@@ -32,5 +32,21 @@ export const movies = [
       "A family heads to an isolated hotel for the winter where a sinister presence influences the father into violence, while his psychic son sees horrific forebodings from both past and future",
     rating: 84,
   },
+  {
+    title: "Mulholland Drive",
+    release_date: "2001-05-16",
+    cover_url: "https://m.media-amazon.com/images/M/MV5BYTRiMzg4NDItNTc3Zi00NjBjLTgwOWYtOGZjMTFmNGU4ODY4XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg",
+    description:
+      "After a car wreck on the winding Mulholland Drive renders a woman amnesiac, she and a perky Hollywood-hopeful search for clues and answers across Los Angeles in a twisting venture beyond dreams and reality",
+    rating: 79,
+  },
+  {
+    title: "The Tenant",
+    release_date: "1976-05-24",
+    cover_url: "https://m.media-amazon.com/images/M/MV5BOWJlYzBjMDQtOGRhOS00OGZjLWEwMjQtY2E0MzI0ZDllYWNmXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg",
+    description:
+      "A bureaucrat rents a Paris apartment where he finds himself drawn into a rabbit hole of dangerous paranoia",
+    rating: 76,
+  },
   
 ];
