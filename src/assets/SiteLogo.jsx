@@ -2,7 +2,8 @@ import React from "react";
 
 function SiteLogo() {
   return (
-    <svg className="w-10"
+    <svg
+      className="w-10"
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
       x="0"
