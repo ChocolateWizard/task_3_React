@@ -1,32 +1,60 @@
 import React from "react";
 
 import MovieCollection from "../movie/collection/MovieCollection";
+import CardLoader from "../helpers/loaders/cardLoader/CardLoader";
 
-export default function Home({ movies }) {
-  const showMovieCardsList = (movies, errorMessage) => {
-    if (movies.length === 0) {
+import { fetchHomepageData } from "../../utils/Api";
+import ShowCollection from "../show/collection/ShowCollection";
+
+export default function Home() {
+  const response = fetchHomepageData();
+
+  const showCardsList = (dataArray, errorMessage, loading, mediaType) => {
+    if (loading == true) {
+      return <CardLoader />;
+    }
+    if (dataArray.length === 0) {
       return (
         <h2 className="mt-5 uppercase tracking-wider text-onyx-primary-30 text-lg font-bold">
           {errorMessage}
         </h2>
       );
     }
-    return <MovieCollection movies={movies} />;
+    switch (mediaType) {
+      case "movies":
+        return <MovieCollection movies={dataArray} />;
+      case "shows":
+        return <ShowCollection shows={dataArray} />;
+      default:
+        <h2 className="mt-5 uppercase tracking-wider text-onyx-primary-30 text-lg font-bold">
+          Could not load {mediaType}
+        </h2>;
+    }
   };
 
   return (
     <div className="container mx-auto px-4 pt-16">
-      <div className="popular-movies">
+      <div>
         <h2 className="uppercase tracking-wider text-mellon-primary text-lg font-semibold">
           Popular movies
         </h2>
-        {showMovieCardsList(movies, "Could not load popular movies")}
+        {showCardsList(
+          response.data.movies,
+          "Could not load popular movies",
+          response.loading.loadingMovies,
+          "movies"
+        )}
       </div>
-      <div className="now-playing-movies py-24">
+      <div className="py-24">
         <h2 className="uppercase tracking-wider text-mellon-primary text-lg font-semibold">
-          Current movies
+          Popular shows
         </h2>
-        {showMovieCardsList(movies, "Could not load current movies")}
+        {showCardsList(
+          response.data.shows,
+          "Could not load popular shows",
+          response.loading.loadingShows,
+          "shows"
+        )}
       </div>
     </div>
   );
