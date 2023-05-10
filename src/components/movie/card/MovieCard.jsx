@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function MovieCard({ movie }) {
   return (
-    <div className="mt-8">
-      {/* <Link to={`/movie/${movie.id}`}> */}
-      <Link to={`/movie/${movie.id}`} state={{ movie }}>
+    <div className="mt-8">     
+      <Link to={`/movie/${movie.id}`}>
         <img
           className="hover:opacity-75 transition ease-in-out duration-150"
           src={"https://image.tmdb.org/t/p/original/"+movie.poster_path}

@@ -181,3 +181,71 @@ export function fetchHomepageData() {
     error: { errorMovies: errorMovies, errorShows: errorShows },
   };
 }
+
+export function fetchMovieDetailsData(id) {
+  //Need: Movie details, directors,actors and stars and their roles
+  const [movieData, setMovieData] = useState(null);
+  const [loadingMovieData, setLoadingMovieData] = useState(true);
+  const [errorMovieData, setErrorMovieData] = useState(null);
+
+  useEffect(() => {
+    setLoadingMovieData(true);
+    axios
+      .get(BASE_URL + `/movie/${id}`, {
+        headers,
+      })
+      .then((details) => {
+        //Movie details returned
+        return axios
+          .get(BASE_URL + `/movie/${id}/credits`, {
+            headers,
+          })
+          .then((credits) => {
+            //Movie credits returned
+            details.data.genresAsText = "";
+            for (let i = 0; i < details.data.genres.length; i++) {
+              details.data.genresAsText =
+                details.data.genresAsText + ", " + details.data.genres[i].name;
+            }
+            details.data.genresAsText = details.data.genresAsText.slice(2);
+            //Array of genres converted to string of names
+            details.data.directorsAsText = "";
+            details.data.writersAsText = "";
+            for (let i = 0; i < credits.data.crew.length; i++) {
+              if (
+                credits.data.crew[i].department === "Directing" &&
+                credits.data.crew[i].job.includes("Director")
+              ) {
+                details.data.directorsAsText =
+                  details.data.directorsAsText +
+                  ", " +
+                  credits.data.crew[i].name;
+              }
+              if (credits.data.crew[i].department === "Writing") {
+                details.data.writersAsText =
+                  details.data.writersAsText + ", " + credits.data.crew[i].name;
+              }
+            }
+            details.data.directorsAsText =
+              details.data.directorsAsText.slice(2);
+            details.data.writersAsText = details.data.writersAsText.slice(2);
+            details.data.cast = credits.data.cast;
+
+            //Array of directors and writers converted to string of names
+            setMovieData(details.data);
+          });
+      })
+      .catch((err) => {
+        setErrorMovieData(err);
+      })
+      .finally(() => {
+        setLoadingMovieData(false);
+      });
+  }, []);
+
+  return {
+    data: { movieData: movieData },
+    loading: { loadingMovieData: loadingMovieData },
+    error: { errorMovieData: errorMovieData },
+  };
+}
