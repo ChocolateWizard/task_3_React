@@ -13,7 +13,7 @@ export default function ShowDetails() {
       return null;
     }
     return (
-      <div className="movie-directors border-t-2 border-onyx-tint">
+      <div className="border-t-2 border-onyx-tint">
         <div className="mt-2 mb-2 text-lg">
           <div className="">Creators: {creatorsAsText}</div>
         </div>
@@ -25,7 +25,7 @@ export default function ShowDetails() {
       return null;
     }
     return (
-      <div className="movie-writers border-y-2 border-onyx-tint">
+      <div className="border-y-2 border-onyx-tint">
         <div className="mt-2 mb-2 text-lg">
           <div className="">Seasons: {number_of_seasons}</div>
         </div>
@@ -41,7 +41,7 @@ export default function ShowDetails() {
       return null;
     }
     return (
-      <div className=" mt-12">
+      <div className="mt-12">
         <CreatorsTab creatorsAsText={creatorsAsText} />
         <NumberOfSeasonsTab number_of_seasons={number_of_seasons} />
       </div>
@@ -55,13 +55,13 @@ export default function ShowDetails() {
   if (data.showData === null) {
     return (
       <h2 className="px-4 mt-5 uppercase tracking-wider text-onyx-primary-30 text-lg font-bold">
-        Unable to load movie details
+        Unable to load show details
       </h2>
     );
   }
 
   return (
-    <div>
+    <>
       <div className="border-b border-onyx-tint">
         <div className="container mx-auto px-4 py-16 flex flex-col md:flex-row">
           <img
@@ -116,6 +116,6 @@ export default function ShowDetails() {
       <div className="border-b border-onyx-tint">
         <CastCollection actors={data.showData.cast} />
       </div>
-    </div>
+    </>
   );
 }

@@ -9,6 +9,47 @@ export default function MovieDetails() {
   const { id } = useParams();
   const { data, loading, error } = fetchMovieDetailsData(id);
 
+  const DirectorsTab = ({ directorsAsText }) => {
+    if (directorsAsText == null || directorsAsText === "") {
+      return null;
+    }
+    return (
+      <div className="border-t-2 border-onyx-tint">
+        <div className="mt-2 mb-2 text-lg">
+          <div className="">Directors: {directorsAsText}</div>
+        </div>
+      </div>
+    );
+  };
+  const WritersTab = ({ writersAsText }) => {
+    if (writersAsText == null || writersAsText === "") {
+      return null;
+    }
+    return (
+      <div className="border-y-2 border-onyx-tint">
+        <div className="mt-2 mb-2 text-lg">
+          <div className="">Writers: {writersAsText}</div>
+        </div>
+      </div>
+    );
+  };
+
+  const MovieTabs = ({ directorsAsText, writersAsText }) => {
+    if (
+      (directorsAsText == null || directorsAsText === "") &&
+      (writersAsText == null || writersAsText === "")
+    ) {
+      return null;
+    }
+    return (
+      <div className=" mt-12">
+        <DirectorsTab directorsAsText={directorsAsText} />
+        <WritersTab writersAsText={writersAsText} />
+      </div>
+    );
+  };
+
+  //=======================================================================================
   if (loading.loadingMovieData == true) {
     return <CardLoader />;
   }
@@ -21,7 +62,7 @@ export default function MovieDetails() {
   }
 
   return (
-    <div>
+    <>
       <div className="border-b border-onyx-tint">
         <div className="container mx-auto px-4 py-16 flex flex-col md:flex-row">
           <img
@@ -51,22 +92,10 @@ export default function MovieDetails() {
               <span>{data.movieData.genresAsText}</span>
             </div>
             <p className="text-onyx-contrast mt-8">{data.movieData.overview}</p>
-            <div className=" mt-12">
-              <div className="movie-directors border-t-2 border-onyx-tint">
-                <div className="mt-2 mb-2 text-lg">
-                  <div className="">
-                    Directors: {data.movieData.directorsAsText}
-                  </div>
-                </div>
-              </div>
-              <div className="movie-writers border-y-2 border-onyx-tint">
-                <div className="mt-2 mb-2 text-lg">
-                  <div className="">
-                    Writers: {data.movieData.writersAsText}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <MovieTabs
+              directorsAsText={data.movieData.directorsAsText}
+              writersAsText={data.movieData.writersAsText}
+            />
 
             <div className="mt-12">
               <button className="flex items-center bg-mellon-primary text-onyx-tint rounded font-semibold px-5 py-4 hover:bg-mellon-shade transition ease-in-out duration-150">
@@ -89,6 +118,6 @@ export default function MovieDetails() {
       <div className="border-b border-onyx-tint">
         <CastCollection actors={data.movieData.cast} />
       </div>
-    </div>
+    </>
   );
 }
