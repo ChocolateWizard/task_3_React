@@ -8,89 +8,6 @@ const headers = {
   Authorization: "bearer " + TOKEN,
 };
 
-// export const fetchDataFromApi = async (url, params) => {
-//   try {
-//     const { data } = await axios.get(BASE_URL + url, {
-//       headers,
-//       params,
-//     });
-//     return data;
-//   } catch (err) {
-//     return err;
-//   }
-// };
-
-// export function fetchPopularMoviesFromApi() {
-//   const [data, setData] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     setLoading(true);
-//     axios
-//       .get(BASE_URL + "/movie/popular", {
-//         headers,
-//       })
-//       .then(({ data }) => {
-//         setData(data.results);
-//       })
-//       .catch((err) => {
-//         setError(err);
-//       })
-//       .finally(() => {
-//         setLoading(false);
-//       });
-//   }, []);
-//   return { data, loading, error };
-// }
-
-// export function fetchHomepageData() {
-//   const [movies, setMovies] = useState([]);
-//   const [shows, setShows] = useState([]);
-//   const [loadingMovies, setLoadingMovies] = useState(true);
-//   const [loadingShows, setLoadingShows] = useState(true);
-//   const [errorMovies, setErrorMovies] = useState(null);
-//   const [errorShows, setErrorShows] = useState(null);
-
-//   useEffect(() => {
-//     setLoadingMovies(true);
-//     setLoadingShows(true);
-//     axios
-//       .get(BASE_URL + "/movie/popular", {
-//         headers,
-//       })
-//       .then(({ data }) => {
-//         setMovies(data.results);
-//       })
-//       .catch((err) => {
-//         setErrorMovies(err);
-//       })
-//       .finally(() => {
-//         setLoadingMovies(false);
-//       });
-//     //======================================
-//     axios
-//       .get(BASE_URL + "/tv/popular", {
-//         headers,
-//       })
-//       .then(({ data }) => {
-//         setShows(data.results);
-//       })
-//       .catch((err) => {
-//         setErrorShows(err);
-//       })
-//       .finally(() => {
-//         setLoadingShows(false);
-//       });
-//   }, []);
-
-//   return {
-//     data: { movies: movies, shows: shows },
-//     loading: { loadingMovies: loadingMovies, loadingShows: loadingShows },
-//     error: { errorMovies: errorMovies, errorShows: errorShows },
-//   };
-// }
-
 export function fetchHomepageData() {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
@@ -247,5 +164,59 @@ export function fetchMovieDetailsData(id) {
     data: { movieData: movieData },
     loading: { loadingMovieData: loadingMovieData },
     error: { errorMovieData: errorMovieData },
+  };
+}
+
+export function fetchShowDetailsData(id) {
+  const [showData, setShowData] = useState(null);
+  const [loadingShowData, setLoadingShowData] = useState(true);
+  const [errorShowData, setErrorShowData] = useState(null);
+
+  useEffect(() => {
+    setLoadingShowData(true);
+    axios
+      .get(BASE_URL + `/tv/${id}`, {
+        headers,
+      })
+      .then((details) => {
+        //Show details returned
+        return axios
+          .get(BASE_URL + `/tv/${id}/credits`, {
+            headers,
+          })
+          .then((credits) => {
+            //Show credits returned
+            details.data.genresAsText = "";
+            for (let i = 0; i < details.data.genres.length; i++) {
+              details.data.genresAsText =
+                details.data.genresAsText + ", " + details.data.genres[i].name;
+            }
+            details.data.genresAsText = details.data.genresAsText.slice(2);
+            //Array of genres converted to string of names
+            details.data.creatorsAsText = "";
+            for (let i = 0; i < details.data.created_by.length; i++) {
+              details.data.creatorsAsText =
+                details.data.creatorsAsText +
+                ", " +
+                details.data.created_by[i].name;
+            }
+            details.data.creatorsAsText = details.data.creatorsAsText.slice(2);
+            //Array of creators converted to string of names
+            details.data.cast = credits.data.cast;           
+            setShowData(details.data);
+          });
+      })
+      .catch((err) => {
+        setErrorShowData(err);
+      })
+      .finally(() => {
+        setLoadingShowData(false);
+      });
+  }, []);
+
+  return {
+    data: { showData: showData },
+    loading: { loadingShowData: loadingShowData },
+    error: { errorShowData: errorShowData },
   };
 }

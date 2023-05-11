@@ -1,19 +1,21 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 export default function ShowCard({ show }) {
   return (
     <div className="mt-8">
-      <a href="/">
+       <Link to={`/show/${show.id}`}>
         <img
           className="hover:opacity-75 transition ease-in-out duration-150"
           src={"https://image.tmdb.org/t/p/original/" + show.poster_path}
           alt=""
         />
-      </a>
+      </Link>
       <div className="mt-2">
-        <a href="" className="text-lg mt-2 hover:text-gray:300">
+        <Link to={`/show/${show.id}`} className="text-lg mt-2 hover:text-gray:300">
           {show.name}
-        </a>
+        </Link>
         <div className="flex items-center text-gray-400 text-sm mt-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"

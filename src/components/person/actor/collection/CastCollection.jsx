@@ -6,7 +6,7 @@ export default function CastCollection({ actors }) {
   const initNumberOfActors = 5;
   const [dataState, setDataState] = useState({
     numberOfActorsShown: initNumberOfActors,
-    showOption: actors.length > 5 ? true : false,
+    showOption: actors != null && actors.length > 5 ? true : false,
     hideOption: false,
   });
 
@@ -55,6 +55,9 @@ export default function CastCollection({ actors }) {
   };
 
   //====================================================================================
+  if (actors == null || actors.length === 0) {
+    return null;
+  }
   return (
     <div className="container mx-auto px-4 py-16">
       <h2 className="text-4xl font-semibold">Cast</h2>
