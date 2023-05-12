@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function MovieCard({ movie }) {
+export default function MovieCardTest2({ movie }) {
   return (
-    <div className="mt-8 px-2">
+    <div className="px-2">
       <Link to={`/movie/${movie.id}`}>
         <img
-          className="h-[350px] hover:opacity-75 transition ease-in-out duration-150"
+          className="h-[330px] w-full inline-block cursor-pointer hover:opacity-75 hover:scale-105 transition ease-in-out duration-300"
           src={"https://image.tmdb.org/t/p/original/" + movie.poster_path}
           alt=""
         />

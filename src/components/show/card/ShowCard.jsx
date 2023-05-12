@@ -4,16 +4,19 @@ import { Link } from "react-router-dom";
 
 export default function ShowCard({ show }) {
   return (
-    <div className="mt-8">
-       <Link to={`/show/${show.id}`}>
+    <div className="mt-8 px-2 ">
+      <Link to={`/show/${show.id}`}>
         <img
-          className="hover:opacity-75 transition ease-in-out duration-150"
+          className="h-[350px] hover:opacity-75 transition ease-in-out duration-150"
           src={"https://image.tmdb.org/t/p/original/" + show.poster_path}
           alt=""
         />
       </Link>
       <div className="mt-2">
-        <Link to={`/show/${show.id}`} className="text-lg mt-2 hover:text-gray:300">
+        <Link
+          to={`/show/${show.id}`}
+          className="text-lg mt-2 hover:text-gray:300"
+        >
           {show.name}
         </Link>
         <div className="flex items-center text-gray-400 text-sm mt-1">

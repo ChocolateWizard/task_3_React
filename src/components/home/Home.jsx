@@ -1,10 +1,11 @@
 import React from "react";
 
-import MovieCollection from "../movie/collection/MovieCollection";
 import CardLoader from "../helpers/loaders/cardLoader/CardLoader";
 
 import { fetchHomepageData } from "../../utils/Api";
-import ShowCollection from "../show/collection/ShowCollection";
+
+import MovieCarousel from "../movie/collection/carousel/MovieCarousel";
+import ShowCarousel from "../show/collection/carousel/ShowCarousel";
 
 export default function Home() {
   const response = fetchHomepageData();
@@ -22,9 +23,9 @@ export default function Home() {
     }
     switch (mediaType) {
       case "movies":
-        return <MovieCollection movies={dataArray} />;
+        return <MovieCarousel movies={dataArray} />;
       case "shows":
-        return <ShowCollection shows={dataArray} />;
+        return <ShowCarousel shows={dataArray} />;
       default:
         <h2 className="mt-5 uppercase tracking-wider text-onyx-primary-30 text-lg font-bold">
           Could not load {mediaType}
