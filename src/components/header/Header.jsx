@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import SiteLogo from "../../assets/SiteLogo";
 
 function Header() {
@@ -15,14 +16,14 @@ function Header() {
             </a>
           </li>
           <li className="mt-3 md:ml-16 md:mt-0">
-            <a href="#" className="hover:text-mellon-primary">
+            <Link to={"/movies"} className="hover:text-mellon-primary">
               Movies
-            </a>
+            </Link>
           </li>
           <li className="mt-3 md:ml-6 md:mt-0">
-            <a href="#" className="hover:text-mellon-primary">
+            <Link to={"/shows"} className="hover:text-mellon-primary">
               TV Shows
-            </a>
+            </Link>
           </li>
           <li className="mt-3 md:ml-6 md:mt-0 md:mr-3">
             <a href="#" className="hover:text-mellon-primary">
