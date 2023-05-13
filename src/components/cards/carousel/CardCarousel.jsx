@@ -1,12 +1,11 @@
 import React from "react";
 
 import Carousel from "react-multi-carousel";
-import ShowCard from "../../card/ShowCard";
 
 import "react-multi-carousel/lib/styles.css";
-import "./ShowCarousel.css";
+import "./CardCarousel.css";
 
-export default function ShowCarousel({ shows }) {
+export default function CardCarousel({ dataArray, CardComponent }) {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -30,8 +29,8 @@ export default function ShowCarousel({ shows }) {
   return (
     <div className="">
       <Carousel responsive={responsive}>
-        {shows.map((show) => (
-          <ShowCard show={show} />
+        {dataArray.map((data) => (
+          <CardComponent data={data} />
         ))}
       </Carousel>
     </div>

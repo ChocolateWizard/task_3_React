@@ -57,7 +57,7 @@ export function fetchHomepageData() {
       });
     //======================================
     axios
-      .get(BASE_URL + "/tv/popular", {
+      .get(BASE_URL + "/tv/top_rated", {
         headers,
       })
       .then((response1) => {

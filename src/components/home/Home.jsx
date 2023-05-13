@@ -4,13 +4,19 @@ import CardLoader from "../helpers/loaders/cardLoader/CardLoader";
 
 import { fetchHomepageData } from "../../utils/Api";
 
-import MovieCarousel from "../movie/collection/carousel/MovieCarousel";
-import ShowCarousel from "../show/collection/carousel/ShowCarousel";
+import CardCarousel from "../cards/carousel/CardCarousel";
+import MovieCard from "../movie/card/MovieCard";
+import ShowCard from "../show/card/ShowCard";
 
 export default function Home() {
   const response = fetchHomepageData();
 
-  const showCardsList = (dataArray, errorMessage, loading, mediaType) => {
+  const ShowCardsList = ({
+    dataArray,
+    errorMessage,
+    loading,
+    CardComponent,
+  }) => {
     if (loading == true) {
       return <CardLoader />;
     }
@@ -21,16 +27,7 @@ export default function Home() {
         </h2>
       );
     }
-    switch (mediaType) {
-      case "movies":
-        return <MovieCarousel movies={dataArray} />;
-      case "shows":
-        return <ShowCarousel shows={dataArray} />;
-      default:
-        <h2 className="mt-5 uppercase tracking-wider text-onyx-primary-30 text-lg font-bold">
-          Could not load {mediaType}
-        </h2>;
-    }
+    return <CardCarousel dataArray={dataArray} CardComponent={CardComponent} />;
   };
 
   return (
@@ -39,23 +36,23 @@ export default function Home() {
         <h2 className="uppercase tracking-wider text-mellon-primary text-lg font-semibold">
           Popular movies
         </h2>
-        {showCardsList(
-          response.data.movies,
-          "Could not load popular movies",
-          response.loading.loadingMovies,
-          "movies"
-        )}
+        <ShowCardsList
+          dataArray={response.data.movies}
+          errorMessage={"Could not load popular movies"}
+          loading={response.loading.loadingMovies}
+          CardComponent={MovieCard}
+        />
       </div>
       <div className="py-24">
         <h2 className="uppercase tracking-wider text-mellon-primary text-lg font-semibold">
           Popular shows
         </h2>
-        {showCardsList(
-          response.data.shows,
-          "Could not load popular shows",
-          response.loading.loadingShows,
-          "shows"
-        )}
+        <ShowCardsList
+          dataArray={response.data.shows}
+          errorMessage={"Could not load popular shows"}
+          loading={response.loading.loadingShows}
+          CardComponent={ShowCard}
+        />
       </div>
     </div>
   );
