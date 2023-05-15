@@ -1,17 +1,15 @@
 import React from "react";
 
-import CardLoader from "../helpers/loaders/cardLoader/CardLoader";
-
 import { fetchHomepageData } from "../../utils/Api";
 
+import CardLoader from "../helpers/loaders/cardLoader/CardLoader";
 import CardCarousel from "../cards/carousel/CardCarousel";
-import MovieCard from "../movie/card/MovieCard";
-import ShowCard from "../show/card/ShowCard";
+import MediaCard from "../cards/MediaCard";
 
 export default function Home() {
   const response = fetchHomepageData();
 
-  const ShowCardsList = ({
+  const RenderCardsList = ({
     dataArray,
     errorMessage,
     loading,
@@ -36,22 +34,22 @@ export default function Home() {
         <h2 className="uppercase tracking-wider text-mellon-primary text-lg font-semibold">
           Popular movies
         </h2>
-        <ShowCardsList
+        <RenderCardsList
           dataArray={response.data.movies}
           errorMessage={"Could not load popular movies"}
           loading={response.loading.loadingMovies}
-          CardComponent={MovieCard}
+          CardComponent={MediaCard}
         />
       </div>
       <div className="py-24">
         <h2 className="uppercase tracking-wider text-mellon-primary text-lg font-semibold">
           Popular shows
         </h2>
-        <ShowCardsList
+        <RenderCardsList
           dataArray={response.data.shows}
           errorMessage={"Could not load popular shows"}
           loading={response.loading.loadingShows}
-          CardComponent={ShowCard}
+          CardComponent={MediaCard}
         />
       </div>
     </div>

@@ -5,7 +5,7 @@ import CardLoader from "../../helpers/loaders/cardLoader/CardLoader";
 import { fetchShowsPageData } from "../../../utils/Api";
 
 import CardCarousel from "../../cards/carousel/CardCarousel";
-import ShowCard from "../card/ShowCard";
+import MediaCard from "../../cards/MediaCard";
 
 
 export default function ShowsPage() {
@@ -40,7 +40,7 @@ export default function ShowsPage() {
           dataArray={response.data.shows}
           errorMessage={"Could not load popular shows"}
           loading={response.loading.loadingShows}
-          CardComponent={ShowCard}
+          CardComponent={MediaCard}
         />
       </div>
       <div className="py-24">
@@ -51,7 +51,7 @@ export default function ShowsPage() {
           dataArray={response.data.shows}
           errorMessage={"Could not load popular shows"}
           loading={response.loading.loadingShows}
-          CardComponent={ShowCard}
+          CardComponent={MediaCard}
         />
       </div>
     </div>

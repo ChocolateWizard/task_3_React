@@ -5,7 +5,7 @@ import CardLoader from "../../helpers/loaders/cardLoader/CardLoader";
 import { fetchMoviesPageData } from "../../../utils/Api";
 
 import CardCarousel from "../../cards/carousel/CardCarousel";
-import MovieCard from "../card/MovieCard";
+import MediaCard from "../../cards/MediaCard";
 
 export default function MoviesPage() {
   const response = fetchMoviesPageData();
@@ -39,7 +39,7 @@ export default function MoviesPage() {
           dataArray={response.data.movies}
           errorMessage={"Could not load popular movies"}
           loading={response.loading.loadingMovies}
-          CardComponent={MovieCard}
+          CardComponent={MediaCard}
         />
       </div>
       <div className="py-24">
@@ -50,7 +50,7 @@ export default function MoviesPage() {
           dataArray={response.data.movies}
           errorMessage={"Could not load popular movies"}
           loading={response.loading.loadingMovies}
-          CardComponent={MovieCard}
+          CardComponent={MediaCard}
         />
       </div>
     </div>

@@ -30,7 +30,7 @@ export default function CardCarousel({ dataArray, CardComponent }) {
     <div className="">
       <Carousel responsive={responsive}>
         {dataArray.map((data) => (
-          <CardComponent data={data} />
+          <CardComponent data={data} key={data.id}/>
         ))}
       </Carousel>
     </div>

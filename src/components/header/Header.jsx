@@ -26,9 +26,9 @@ function Header() {
             </Link>
           </li>
           <li className="mt-3 md:ml-6 md:mt-0 md:mr-3">
-            <a href="#" className="hover:text-mellon-primary">
-              Actors
-            </a>
+          <Link to={"/watchlist"} className="hover:text-mellon-primary">
+              Watchlist
+            </Link>
           </li>
         </ul>
         <div className="flex flex-col md:flex-row items-center">

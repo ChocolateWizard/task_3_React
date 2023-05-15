@@ -8,6 +8,30 @@ const headers = {
   Authorization: "bearer " + TOKEN,
 };
 
+function convertOutsideAPI(data) {
+  switch (data.mediaType) {
+    case "movie":
+      data.coverPath =
+        "https://image.tmdb.org/t/p/original/" + data.poster_path;
+      data.rating = data.vote_average;
+      data.releaseDate = data.release_date;
+      data.description = data.overview;
+      break;
+    case "show":
+      data.coverPath =
+        "https://image.tmdb.org/t/p/original/" + data.poster_path;
+        data.title = data.name;
+      data.rating = data.vote_average;
+      data.releaseDate = data.first_air_date;
+      data.description = data.overview;
+      if (data.intendedComponent == "Details") {
+        data.numberOfSeasons = data.number_of_seasons;
+      }
+      break;
+    default:
+  }
+}
+
 export function fetchHomepageData() {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
@@ -34,6 +58,7 @@ export function fetchHomepageData() {
             response1.data.results.map((movie) => {
               movie.genres = [];
               movie.genresAsText = "";
+              movie.mediaType = "movie";
               for (let i = 0; i < movie.genre_ids.length; i++) {
                 for (let j = 0; j < response2.data.genres.length; j++) {
                   if (movie.genre_ids[i] === response2.data.genres[j].id) {
@@ -45,6 +70,7 @@ export function fetchHomepageData() {
                 }
               }
               movie.genresAsText = movie.genresAsText.slice(2);
+              convertOutsideAPI(movie);
             });
             setMovies(response1.data.results);
           });
@@ -69,6 +95,7 @@ export function fetchHomepageData() {
             response1.data.results.map((show) => {
               show.genres = [];
               show.genresAsText = "";
+              show.mediaType = "show";
               for (let i = 0; i < show.genre_ids.length; i++) {
                 for (let j = 0; j < response2.data.genres.length; j++) {
                   if (show.genre_ids[i] === response2.data.genres[j].id) {
@@ -80,6 +107,7 @@ export function fetchHomepageData() {
                 }
               }
               show.genresAsText = show.genresAsText.slice(2);
+              convertOutsideAPI(show);
             });
             setShows(response1.data.results);
           });
@@ -119,6 +147,7 @@ export function fetchMovieDetailsData(id) {
           })
           .then((credits) => {
             //Movie credits returned
+            details.data.mediaType = "movie";
             details.data.genresAsText = "";
             for (let i = 0; i < details.data.genres.length; i++) {
               details.data.genresAsText =
@@ -147,6 +176,7 @@ export function fetchMovieDetailsData(id) {
               details.data.directorsAsText.slice(2);
             details.data.writersAsText = details.data.writersAsText.slice(2);
             details.data.cast = credits.data.cast;
+            convertOutsideAPI(details.data);
 
             //Array of directors and writers converted to string of names
             setMovieData(details.data);
@@ -186,6 +216,7 @@ export function fetchShowDetailsData(id) {
           })
           .then((credits) => {
             //Show credits returned
+            details.data.mediaType = "show";
             details.data.genresAsText = "";
             for (let i = 0; i < details.data.genres.length; i++) {
               details.data.genresAsText =
@@ -203,6 +234,8 @@ export function fetchShowDetailsData(id) {
             details.data.creatorsAsText = details.data.creatorsAsText.slice(2);
             //Array of creators converted to string of names
             details.data.cast = credits.data.cast;
+            details.data.intendedComponent = "Details";
+            convertOutsideAPI(details.data);
             setShowData(details.data);
           });
       })
@@ -243,6 +276,7 @@ export function fetchMoviesPageData() {
             response1.data.results.map((movie) => {
               movie.genres = [];
               movie.genresAsText = "";
+              movie.mediaType = "movie";
               for (let i = 0; i < movie.genre_ids.length; i++) {
                 for (let j = 0; j < response2.data.genres.length; j++) {
                   if (movie.genre_ids[i] === response2.data.genres[j].id) {
@@ -254,6 +288,7 @@ export function fetchMoviesPageData() {
                 }
               }
               movie.genresAsText = movie.genresAsText.slice(2);
+              convertOutsideAPI(movie);
             });
             setMovies(response1.data.results);
           });
@@ -293,6 +328,7 @@ export function fetchShowsPageData() {
             response1.data.results.map((show) => {
               show.genres = [];
               show.genresAsText = "";
+              show.mediaType = "show";
               for (let i = 0; i < show.genre_ids.length; i++) {
                 for (let j = 0; j < response2.data.genres.length; j++) {
                   if (show.genre_ids[i] === response2.data.genres[j].id) {
@@ -304,6 +340,7 @@ export function fetchShowsPageData() {
                 }
               }
               show.genresAsText = show.genresAsText.slice(2);
+              convertOutsideAPI(show);
             });
             setShows(response1.data.results);
           });
