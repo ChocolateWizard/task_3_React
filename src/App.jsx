@@ -12,25 +12,29 @@ import MoviesPage from "./components/movie/page/MoviesPage";
 import ShowsPage from "./components/show/page/ShowsPage";
 import Watchlist from "./components/watchlist/Watchlist";
 
+import { GlobalProvider } from "./context/GlobalState";
+
 function App() {
   return (
-    <div className="min-h-screen">
-      <Router>
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/movies" exact element={<MoviesPage />} />
-            <Route path="/shows" exact element={<ShowsPage />} />
-            <Route path="/watchlist" exact element={<Watchlist />} />
-            <Route path="/movie/:id" element={<MovieDetails />} />
-            <Route path="/show/:id" element={<ShowDetails />} />
-            <Route path="/*" element={<PageNotFound />} />
-          </Routes>
-        </main>
-        <Footer />
-      </Router>
-    </div>
+    <GlobalProvider>
+      <div className="min-h-screen">
+        <Router>
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" exact element={<Home />} />
+              <Route path="/movies" exact element={<MoviesPage />} />
+              <Route path="/shows" exact element={<ShowsPage />} />
+              <Route path="/watchlist" exact element={<Watchlist />} />
+              <Route path="/movie/:id" element={<MovieDetails />} />
+              <Route path="/show/:id" element={<ShowDetails />} />
+              <Route path="/*" element={<PageNotFound />} />
+            </Routes>
+          </main>
+          <Footer />
+        </Router>
+      </div>
+    </GlobalProvider>
   );
 }
 

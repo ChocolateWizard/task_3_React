@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../../../context/GlobalState";
 
 import { useParams } from "react-router-dom";
 import { fetchMovieDetailsData } from "../../../utils/Api";
@@ -7,7 +8,15 @@ import CastCollection from "../../person/actor/collection/CastCollection";
 
 export default function MovieDetails() {
   const { id } = useParams();
+  const { addMovieToWatchlist, removeMovieFromWatchlist, movieWatchlist } =
+    useContext(GlobalContext);
   const { data, loading, error } = fetchMovieDetailsData(id);
+
+  let storedMovie = movieWatchlist.find(
+    (o) => data.movieData != null && o.id === data.movieData.id
+  );
+
+  const watchlistDisabled = storedMovie ? true : false;
 
   const DirectorsTab = ({ directorsAsText }) => {
     if (directorsAsText == null || directorsAsText === "") {
@@ -46,6 +55,37 @@ export default function MovieDetails() {
         <DirectorsTab directorsAsText={directorsAsText} />
         <WritersTab writersAsText={writersAsText} />
       </div>
+    );
+  };
+
+  const ShowButton = ({ disabled }) => {
+    return (
+      <button
+        onClick={
+          disabled
+            ? () => removeMovieFromWatchlist(data.movieData.id)
+            : () => addMovieToWatchlist(data.movieData)
+        }
+        className={
+          "flex items-center  rounded font-semibold px-5 py-4  transition ease-in-out duration-150 " +
+          (disabled
+            ? "bg-onyx-tint text-onyx-primary-10 hover:bg-onyx-primary-30"
+            : "bg-mellon-primary text-onyx-tint hover:bg-mellon-shade")
+        }
+      >
+        <svg
+          className="bi bi-play-circle-fill fill-onyx-shade"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 16 16"
+        >
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
+        </svg>
+        <span className="ml-2">
+          {disabled ? "Remove from watchlist" : "Add to watchlist"}
+        </span>
+      </button>
     );
   };
 
@@ -93,18 +133,7 @@ export default function MovieDetails() {
             />
 
             <div className="mt-12">
-              <button className="flex items-center bg-mellon-primary text-onyx-tint rounded font-semibold px-5 py-4 hover:bg-mellon-shade transition ease-in-out duration-150">
-                <svg
-                  className="bi bi-play-circle-fill fill-onyx-shade"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
-                </svg>
-                <span className="ml-2">Play trailer</span>
-              </button>
+              <ShowButton disabled={watchlistDisabled} />
             </div>
           </div>
         </div>
