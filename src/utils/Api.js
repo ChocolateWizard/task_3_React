@@ -8,7 +8,7 @@ const headers = {
   Authorization: "bearer " + TOKEN,
 };
 
-function convertOutsideAPI(data) {
+function formatForeignAPI(data,intendedComponent) {
   switch (data.mediaType) {
     case "movie":
       data.coverPath =
@@ -24,7 +24,7 @@ function convertOutsideAPI(data) {
       data.rating = data.vote_average;
       data.releaseDate = data.first_air_date;
       data.description = data.overview;
-      if (data.intendedComponent == "Details") {
+      if (intendedComponent == "ShowDetails") {
         data.numberOfSeasons = data.number_of_seasons;
       }
       break;
@@ -70,7 +70,7 @@ export function fetchHomepageData() {
                 }
               }
               movie.genresAsText = movie.genresAsText.slice(2);
-              convertOutsideAPI(movie);
+              formatForeignAPI(movie,"Home");
             });
             setMovies(response1.data.results);
           });
@@ -107,7 +107,7 @@ export function fetchHomepageData() {
                 }
               }
               show.genresAsText = show.genresAsText.slice(2);
-              convertOutsideAPI(show);
+              formatForeignAPI(show,"Home");
             });
             setShows(response1.data.results);
           });
@@ -176,7 +176,7 @@ export function fetchMovieDetailsData(id) {
               details.data.directorsAsText.slice(2);
             details.data.writersAsText = details.data.writersAsText.slice(2);
             details.data.cast = credits.data.cast;
-            convertOutsideAPI(details.data);
+            formatForeignAPI(details.data,"MovieDetails");
 
             //Array of directors and writers converted to string of names
             setMovieData(details.data);
@@ -234,8 +234,7 @@ export function fetchShowDetailsData(id) {
             details.data.creatorsAsText = details.data.creatorsAsText.slice(2);
             //Array of creators converted to string of names
             details.data.cast = credits.data.cast;
-            details.data.intendedComponent = "Details";
-            convertOutsideAPI(details.data);
+            formatForeignAPI(details.data,"ShowDetails");
             setShowData(details.data);
           });
       })
@@ -288,7 +287,7 @@ export function fetchMoviesPageData() {
                 }
               }
               movie.genresAsText = movie.genresAsText.slice(2);
-              convertOutsideAPI(movie);
+              formatForeignAPI(movie,"MoviesPage");
             });
             setMovies(response1.data.results);
           });
@@ -340,7 +339,7 @@ export function fetchShowsPageData() {
                 }
               }
               show.genresAsText = show.genresAsText.slice(2);
-              convertOutsideAPI(show);
+              formatForeignAPI(show,"ShowsPage");
             });
             setShows(response1.data.results);
           });
