@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SiteLogo from "../../assets/SiteLogo";
+import Searchbar from "./Searchbar";
 
-function Header() {
+export default function Header() {
+ 
+
   return (
     <header className="border-b border-onyx-tint bg-onyx-tint">
       <nav className="container flex flex-col md:flex-row items-center justify-between py-2">
@@ -26,29 +29,13 @@ function Header() {
             </Link>
           </li>
           <li className="mt-3 md:ml-6 md:mt-0 md:mr-3">
-          <Link to={"/watchlist"} className="hover:text-mellon-primary">
+            <Link to={"/watchlist"} className="hover:text-mellon-primary">
               Watchlist
             </Link>
           </li>
         </ul>
         <div className="flex flex-col md:flex-row items-center">
-          <div className="relative mt-3 md:mt-0">
-            <input
-              type="text"
-              className="bg-onyx-contrast text-onyx-tint rounded-full w-64 px-4 pl-8 py-1"
-              placeholder="Search"
-            />
-            <div className="absolute top-0">
-              <svg
-                className="fill-current w-4 text-gray-500 mt-2 ml-2 bi bi-search"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-              </svg>
-            </div>
-          </div>
+          <Searchbar />
           <div className="mt-3 md:ml-4 md:mt-0 flex flex-col md:flex-row">
             <ul className="flex flex-col md:flex-row items-center ml-auto">
               <li>
@@ -69,4 +56,3 @@ function Header() {
     </header>
   );
 }
-export default Header;

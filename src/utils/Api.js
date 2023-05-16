@@ -8,19 +8,23 @@ const headers = {
   Authorization: "bearer " + TOKEN,
 };
 
-function formatForeignAPI(data,intendedComponent) {
+function formatForeignAPI(data, intendedComponent) {
   switch (data.mediaType) {
     case "movie":
       data.coverPath =
-        "https://image.tmdb.org/t/p/original/" + data.poster_path;
+        data.poster_path == null
+          ? "https://picsum.photos/id/237/200/300"
+          : "https://image.tmdb.org/t/p/original" + data.poster_path;
       data.rating = data.vote_average;
       data.releaseDate = data.release_date;
       data.description = data.overview;
       break;
     case "show":
       data.coverPath =
-        "https://image.tmdb.org/t/p/original/" + data.poster_path;
-        data.title = data.name;
+        data.poster_path === null
+          ? "https://picsum.photos/id/237/200/300"
+          : "https://image.tmdb.org/t/p/original" + data.poster_path;
+      data.title = data.name;
       data.rating = data.vote_average;
       data.releaseDate = data.first_air_date;
       data.description = data.overview;
@@ -70,7 +74,7 @@ export function fetchHomepageData() {
                 }
               }
               movie.genresAsText = movie.genresAsText.slice(2);
-              formatForeignAPI(movie,"Home");
+              formatForeignAPI(movie, "Home");
             });
             setMovies(response1.data.results);
           });
@@ -107,7 +111,7 @@ export function fetchHomepageData() {
                 }
               }
               show.genresAsText = show.genresAsText.slice(2);
-              formatForeignAPI(show,"Home");
+              formatForeignAPI(show, "Home");
             });
             setShows(response1.data.results);
           });
@@ -176,7 +180,7 @@ export function fetchMovieDetailsData(id) {
               details.data.directorsAsText.slice(2);
             details.data.writersAsText = details.data.writersAsText.slice(2);
             details.data.cast = credits.data.cast;
-            formatForeignAPI(details.data,"MovieDetails");
+            formatForeignAPI(details.data, "MovieDetails");
 
             //Array of directors and writers converted to string of names
             setMovieData(details.data);
@@ -234,7 +238,7 @@ export function fetchShowDetailsData(id) {
             details.data.creatorsAsText = details.data.creatorsAsText.slice(2);
             //Array of creators converted to string of names
             details.data.cast = credits.data.cast;
-            formatForeignAPI(details.data,"ShowDetails");
+            formatForeignAPI(details.data, "ShowDetails");
             setShowData(details.data);
           });
       })
@@ -287,7 +291,7 @@ export function fetchMoviesPageData() {
                 }
               }
               movie.genresAsText = movie.genresAsText.slice(2);
-              formatForeignAPI(movie,"MoviesPage");
+              formatForeignAPI(movie, "MoviesPage");
             });
             setMovies(response1.data.results);
           });
@@ -339,7 +343,7 @@ export function fetchShowsPageData() {
                 }
               }
               show.genresAsText = show.genresAsText.slice(2);
-              formatForeignAPI(show,"ShowsPage");
+              formatForeignAPI(show, "ShowsPage");
             });
             setShows(response1.data.results);
           });
@@ -357,4 +361,123 @@ export function fetchShowsPageData() {
     loading: { loadingShows: loadingShows },
     error: { errorShows: errorShows },
   };
+}
+
+export function fetchMediaForSearchbar(title, setMedia) {
+  axios
+    .get(BASE_URL + "/search/movie", {
+      headers,
+      params: {
+        query: title,
+      },
+    })
+    .then((movieData) => {
+      //Movies returned successfully
+      return axios
+        .get(BASE_URL + "/search/tv", {
+          headers,
+          params: {
+            query: title,
+          },
+        })
+        .then((showsData) => {
+          setMedia(movieData.data.results.concat(showsData.data.results));
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  //======================================
+}
+
+export function fetchMediaForSearchResults(title, setMedia, setLoading) {
+  setLoading(true);
+  axios
+    .get(BASE_URL + "/search/movie", {
+      headers,
+      params: {
+        query: title,
+      },
+    })
+    .then((movieData) => {
+      //Movies returned successfully
+      return axios
+        .get(BASE_URL + "/genre/movie/list", {
+          headers,
+        })
+        .then((movieGenresData) => {
+          //Movie genres returned successfully
+          movieData.data.results.map((movie) => {
+            movie.genres = [];
+            movie.genresAsText = "";
+            movie.mediaType = "movie";
+            for (let i = 0; i < movie.genre_ids.length; i++) {
+              for (let j = 0; j < movieGenresData.data.genres.length; j++) {
+                if (movie.genre_ids[i] === movieGenresData.data.genres[j].id) {
+                  movie.genres.push(movieGenresData.data.genres[j]);
+                  movie.genresAsText =
+                    movie.genresAsText +
+                    ", " +
+                    movieGenresData.data.genres[j].name;
+                  break;
+                }
+              }
+            }
+            movie.genresAsText = movie.genresAsText.slice(2);
+            formatForeignAPI(movie, "SearchResults");
+          });
+          //-----------------------------------------------------
+          return axios
+            .get(BASE_URL + "/search/tv", {
+              headers,
+              params: {
+                query: title,
+              },
+            })
+            .then((showsData) => {
+              //TV shows returned successfully
+              return axios
+                .get(BASE_URL + "/genre/tv/list", {
+                  headers,
+                })
+                .then((showGenresData) => {
+                  //TV genres returned successfully
+                  showsData.data.results.map((show) => {
+                    show.genres = [];
+                    show.genresAsText = "";
+                    show.mediaType = "show";
+                    for (let i = 0; i < show.genre_ids.length; i++) {
+                      for (
+                        let j = 0;
+                        j < showGenresData.data.genres.length;
+                        j++
+                      ) {
+                        if (
+                          show.genre_ids[i] === showGenresData.data.genres[j].id
+                        ) {
+                          show.genres.push(showGenresData.data.genres[j]);
+                          show.genresAsText =
+                            show.genresAsText +
+                            ", " +
+                            showGenresData.data.genres[j].name;
+                          break;
+                        }
+                      }
+                    }
+                    show.genresAsText = show.genresAsText.slice(2);
+                    formatForeignAPI(show, "SearchResults");
+                  });
+                  setMedia(
+                    movieData.data.results.concat(showsData.data.results)
+                  );
+                });
+            });
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
 }

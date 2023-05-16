@@ -20,7 +20,7 @@ export default function MediaCard({ data }) {
       <Link to={detailsPageURL}>
         <img
           className="h-[350px] hover:opacity-75 transition ease-in-out duration-150"
-          src={"https://image.tmdb.org/t/p/original/" + data.coverPath}
+          src={data.coverPath}
           alt=""
         />
       </Link>
